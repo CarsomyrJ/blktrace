@@ -31,6 +31,10 @@ char *devices, *exes, *input_name, *output_name, *seek_name, *bno_dump_name;
 char *d2c_name, *q2c_name, *per_io_name, *unplug_hist_name;
 char *sps_name, *aqd_name, *q2d_name, *per_io_trees;
 FILE *rngs_ofp, *avgs_ofp, *xavgs_ofp, *per_io_ofp, *msgs_ofp;
+/* Trace hoyoon */
+char *hoyoon_trace_name;
+FILE *hoyoon_trace_ofp;
+/* End trace hoyoon */
 int verbose, done, time_bounded, output_all_data, seek_absolute;
 int easy_parse_avgs, ignore_remaps, do_p_live;
 double t_astart, t_aend, last_t_seen;
@@ -80,7 +84,7 @@ int main(int argc, char *argv[])
 	if (avgs_ofp != stdout)
 		fclose(avgs_ofp);
 	if (xavgs_ofp)
-		fclose(xavgs_ofp);
+		fclose(xavgs_ofp);	
 
 	dip_cleanup();
 	dev_map_exit();

@@ -29,7 +29,7 @@
 
 #define SETBUFFER_SIZE	(64 * 1024)
 
-#define S_OPTS	"aAB:d:D:e:hi:I:l:L:m:M:o:p:P:q:Q:rs:S:t:T:u:VvXz:Z"
+#define S_OPTS	"aAB:d:D:e:hi:I:l:L:m:M:o:p:P:q:Q:rs:S:t:T:u:VvXz:Z:H:"
 static struct option l_opts[] = {
 	{
 		.name = "seek-absolute",
@@ -206,6 +206,12 @@ static struct option l_opts[] = {
 		.val = 'z'
 	},
 	{
+		.name = "hoyoon-trace",
+		.has_arg = required_argument,
+		.flag = NULL,
+		.val = 'H'
+	},
+	{
 		.name = NULL,
 	}
 };
@@ -218,6 +224,7 @@ static char usage_str[] = \
 	"[ -D <dev;...>     | --devices=<dev;...> ]\n" \
 	"[ -e <exe,...>     | --exes=<exe,...>  ]\n" \
 	"[ -h               | --help ]\n" \
+	"[ -H <output name> | --hoyoon-trace=<output name> ]\n" \
 	"[ -i <input name>  | --input-file=<input name> ]\n" \
 	"[ -I <output name> | --iostat=<output name> ]\n" \
 	"[ -l <output name> | --d2c-latencies=<output name> ]\n" \
@@ -376,7 +383,7 @@ void handle_args(int argc, char *argv[])
 			verbose = 1;
 			break;
 		case 'V':
-			printf("%s version %s\n", argv[0], bt_timeline_version);
+			printf("HOYOON %s version %s\n", argv[0], bt_timeline_version);
 			exit(0);
 		case 'X':
 			easy_parse_avgs++;
@@ -386,6 +393,9 @@ void handle_args(int argc, char *argv[])
 			break;
 		case 'Z':
 			do_p_live = 1;
+			break;
+		case 'H':
+			hoyoon_trace_name = strdup(optarg);
 			break;
 		default:
 			usage(argv[0]);
@@ -420,4 +430,6 @@ void handle_args(int argc, char *argv[])
 
 	iostat_ofp = setup_ofile(iostat_name);
 	per_io_ofp = setup_ofile(per_io_name);
+	hoyoon_trace_ofp = setup_ofile(hoyoon_trace_name);
+
 }

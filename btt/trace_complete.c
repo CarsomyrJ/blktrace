@@ -32,6 +32,21 @@ static inline void __out(FILE *ofp, __u64 tm, enum iop_type type,
 	}
 }
 
+
+/* New output function for trace translator
+ * Format : 
+ * address - size - timestamp - q2c time - R/W marker
+ */
+static void display_trace_hoyoon(FILE *ofp, struct io *iop)
+{
+	__u64 q2c = tdelta(iop->t.time, iop->c_time);
+	
+	fprintf(ofp, "%10llu %4u %5d.%09lu %d %c\n", 
+		iop->c_sec, iop->c_nsec, 
+		(int)SECONDS(iop->t.time), (unsigned long)NANO_SECONDS(iop->t.time),  
+		q2c, IOP_RW(iop) ? 'R' : 'W');		
+}
+
 static void display_io_track(FILE *ofp, struct io *iop)
 {
 	fprintf(ofp, "%3d,%-3d: ", MAJOR(iop->t.device), MINOR(iop->t.device));
@@ -97,6 +112,14 @@ static void handle_complete(struct io *c_iop)
 			fprintf(pit_fp, "%d.%09lu ",
 				(int)SECONDS(q_iop->t.time),
 				(unsigned long)NANO_SECONDS(q_iop->t.time));
+		}
+
+		/* New trace format output */
+		if (hoyoon_trace_ofp) {
+			q_iop->c_time = c_iop->t.time;
+			q_iop->c_sec = c_iop->t.sector;
+			q_iop->c_nsec = t_sec(&c_iop->t);
+			display_trace_hoyoon(hoyoon_trace_ofp, q_iop);
 		}
 
 		list_del(&q_iop->f_head);
