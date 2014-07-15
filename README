@@ -1,3 +1,26 @@
+New trace option for btt
+------------------------
+
+For my own research purpose, I've introduced a new btt option -H. -H ( --hoyoon_trace ) option takes output file name as an argument and prints io traces on the output file with following format :
+
+Sector number - size - timestamp - q2c time - R/W marker
+
+You can use it with following command :
+
+btt -H <output_name>
+
+This amendment is solely for personal purpose and does not have any kind of relationship with main blktrace commit on kernel. If you need these for similar operation, feel free to fork, use, or revise them.
+
+Hoyoon Jun
+Seoul National University 
+
+hoyoonjun@davinci.snu.ac.kr
+zeratul9901@gmail.com
+
+
+Original README from blkparse source
+------------------------------------------------------------------------------
+
 Block IO Tracing
 ----------------
 
